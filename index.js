@@ -3,6 +3,7 @@ const client = new Discord.Client();
 const fetch = require('node-fetch');
 const fs = require('fs');
 const { prefix, cartman_quotes, help } = require('./config.json');
+const token = process.env.token || require('./environment.json').token;
 
 client.once('ready', () => {
 	console.log('Ready!');
@@ -95,4 +96,4 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
 });
 
 // This is the token used by heroku on production. Can change to local token for testing if needed.
-client.login(process.env.token);
+client.login(token);
