@@ -3,7 +3,7 @@ const client = new Discord.Client();
 const fetch = require('node-fetch');
 const fs = require('fs');
 const { prefix, cartman_quotes, help } = require('./config.json');
-const { token } = require('./environment.json');
+const environment = process.env.production === 'true' ? process.env.token : require('./environment.json');
 
 client.once('ready', () => {
 	console.log('Ready!');
@@ -94,6 +94,4 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         }
     }
 });
-const key = process.env.production ? process.env.api_key : token;
-console.log(process.env.production);
-client.login(key);
+client.login(environment.token);
