@@ -93,4 +93,6 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         }
     }
 });
+
+// This is the token used by heroku on production. Can change to local token for testing if needed.
 client.login(process.env.token);
