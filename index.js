@@ -2,7 +2,8 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const fetch = require('node-fetch');
 const fs = require('fs');
-const { prefix, token, cartman_quotes, help } = require('./config.json');
+const { prefix, cartman_quotes, help } = require('./config.json');
+const { token } = process.env.production ? process.env.api_key : require('./environment.json'); 
 
 client.once('ready', () => {
 	console.log('Ready!');
