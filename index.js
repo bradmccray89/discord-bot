@@ -80,10 +80,6 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             })
         }
         if (userName !== '') {
-            let gorillamosh = '161943929665748992';
-            let guild = client.guilds.cache.first();
-            let members = guild.members;
-            // console.log('members: ', members);
             const time = new Date();
             console.log(`JOINED: ${userName} -> ${newUserChannel.name} - ${time}`);
         }
