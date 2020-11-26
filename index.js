@@ -68,6 +68,9 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         case '316592946973638657':
             userName = 'FattyB';
             break;
+        case '161943929665748992':
+            userName = 'Corey';
+            break;
         default:
             userName = 'A random user';
             fileName = './audio_clips/im_gay.mp3';
