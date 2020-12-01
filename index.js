@@ -53,7 +53,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             break;
         case '318992296181891072':
             userName = 'Brandon';
-            fileName = './audio_clips/fart.mp3';
+            fileName = './audio_clips/broke_my_back.mp3';
             break;
         case '661775904799850531':
             userName = 'Jacob';
@@ -65,6 +65,10 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             userName = 'Paige';
             fileName = './audio_clips/that_was_legitness.mp3';
             break;
+        case '762503812694540309':
+            userName = 'Gavin';
+            fileName = './audio_clips/10_years_old.mp3';
+            break;
         case '316592946973638657':
             userName = 'FattyB';
             break;
@@ -73,7 +77,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             break;
         default:
             userName = 'A random user';
-            fileName = './audio_clips/im_gay.mp3';
+            fileName = './audio_clips/fart.mp3';
     }
     if (newUserChannel !== null && oldUserChannel?.id !== newUserChannel?.id) {
         if (fileName !== '') {
