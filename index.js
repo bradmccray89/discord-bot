@@ -59,7 +59,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             userName = 'Jacob';
             fileName = './audio_clips/america.mp3';
             break;
-        case '770817649189191682':
+        case '770817649189191682': // This is Yoda (BOT).
             break;
         case '708097772586401812':
             userName = 'Paige';
