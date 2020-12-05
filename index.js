@@ -49,11 +49,11 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             break;
         case '707469106873368658':
             userName = 'Liam';
-            fileName = './audio_clips/uh_oh_alert.mp3';
+            fileName = './audio_clips/among_us.mp3';
             break;
         case '318992296181891072':
             userName = 'Brandon';
-            fileName = './audio_clips/broke_my_back.mp3';
+            fileName = './audio_clips/wheres_the_chapstick.mp3';
             break;
         case '661775904799850531':
             userName = 'Jacob';
