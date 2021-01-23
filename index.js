@@ -37,6 +37,14 @@ client.on('message', async message => {
     }
 });
 
+// client.on('presenceUpdate', (oldPresence, newPresence) => {
+//     if (oldPresence.userID === '318992296181891072') {
+//         console.log('test');
+//         console.log('oldPresence', oldPresence);
+//         console.log('newPresence', newPresence);
+//     }
+// })
+
 client.on('voiceStateUpdate', (oldMember, newMember) => {
     let newUserChannel = newMember.channel;
     let oldUserChannel = oldMember.channel;
@@ -53,7 +61,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             break;
         case '318992296181891072':
             userName = 'Brandon';
-            fileName = './audio_clips/fart.mp3';
+            fileName = './audio_clips/im_joe_bidens_husband.mp3';
             break;
         case '661775904799850531':
             userName = 'Jacob';
@@ -75,11 +83,23 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         case '161943929665748992':
             userName = 'Corey';
             break;
+        case '777003750246055969':
+            userName = 'Andrew B.';
+            fileName = './audio_clips/im_joe_bidens_husband.mp3';
+            break;
         default:
             userName = 'A random user';
             fileName = './audio_clips/fart.mp3';
     }
     if (newUserChannel !== null && oldUserChannel?.id !== newUserChannel?.id) {
+
+        for (const [memberID, member] of newUserChannel.members) {
+            member.presence.activities.forEach(activity => {
+                if (activity.type === 'STREAMING') {
+                    fileName = '';
+                }
+            })
+        }
         if (fileName !== '') {
             newUserChannel.join().then(connection => {
                 const dispatcher = connection.play(fs.createReadStream(fileName));
@@ -88,7 +108,12 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         }
         if (userName !== '') {
             const time = new Date();
-            console.log(`JOINED: ${userName} -> ${newUserChannel.name} - ${time}`);
+            const user = newUserChannel.guild.members.cache.get(newMember.id);
+            var userActivity = '';
+            user.presence.activities.forEach((activity, index) => {
+                userActivity = (index === 0) ? userActivity.concat(activity.type) : userActivity.concat(', ', activity.type);
+            })
+            console.log(`JOINED: ${userName} (${userActivity}) -> ${newUserChannel.name} - ${time}`);
         }
     } else if (newUserChannel === null && oldUserChannel?.id !== newUserChannel?.id) {
         if (userName !== '') {
