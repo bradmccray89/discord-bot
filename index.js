@@ -92,9 +92,8 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             fileName = './audio_clips/fart.mp3';
     }
     if (newUserChannel !== null && oldUserChannel?.id !== newUserChannel?.id) {
-
-        for (const [memberID, member] of newUserChannel.members) {
-            member.presence.activities.forEach(activity => {
+        for (const member of newUserChannel.members) {
+            member.presence?.activities.forEach(activity => {
                 if (activity.type === 'STREAMING') {
                     fileName = '';
                 }
