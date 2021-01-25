@@ -101,8 +101,10 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         }
         if (fileName !== '') {
             newUserChannel.join().then(connection => {
-                const dispatcher = connection.play(fs.createReadStream(fileName));
-                dispatcher.on('finish', () => connection.disconnect());
+                setTimeout(function() {
+                    const dispatcher = connection.play(fs.createReadStream(fileName));
+                    dispatcher.on('finish', () => connection.disconnect());
+                },200);
             })
         }
         if (userName !== '') {
