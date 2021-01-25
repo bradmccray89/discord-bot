@@ -37,14 +37,6 @@ client.on('message', async message => {
     }
 });
 
-// client.on('presenceUpdate', (oldPresence, newPresence) => {
-//     if (oldPresence.userID === '318992296181891072') {
-//         console.log('test');
-//         console.log('oldPresence', oldPresence);
-//         console.log('newPresence', newPresence);
-//     }
-// })
-
 client.on('voiceStateUpdate', (oldMember, newMember) => {
     let newUserChannel = newMember.channel;
     let oldUserChannel = oldMember.channel;
