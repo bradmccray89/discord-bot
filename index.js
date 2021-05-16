@@ -9,6 +9,10 @@ client.once('ready', () => {
 	console.log('Ready!');
 });
 
+client.on('presenceUpdate', (oldMember, newMember) => {
+    // Do something when people start and stop games
+})
+
 client.on('message', async message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
@@ -93,10 +97,8 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         }
         if (fileName !== '') {
             newUserChannel.join().then(connection => {
-                setTimeout(function() {
-                    const dispatcher = connection.play(fs.createReadStream(fileName));
-                    dispatcher.on('finish', () => connection.disconnect());
-                },200);
+                const dispatcher = connection.play(fs.createReadStream(fileName));
+                dispatcher.on('finish', () => connection.disconnect());
             })
         }
         if (userName !== '') {
