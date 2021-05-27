@@ -107,8 +107,10 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
                         connection.disconnect()
                     }
                 })
-                const dispatcher = connection.play(fs.createReadStream(fileName));
-                dispatcher.on('finish', () => connection.disconnect());
+                if (userName !== 'Gavin') {
+                    const dispatcher = connection.play(fs.createReadStream(fileName));
+                    dispatcher.on('finish', () => connection.disconnect());
+                }
             })
         }
         if (userName !== '') {
