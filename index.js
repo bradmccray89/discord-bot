@@ -100,8 +100,8 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
                 let index = 0
                 if (userName === 'Gavin') {
                     connection.on('speaking', (user, speaking) => {
-                        index++
-                        if (index < 5 && speaking.bitfield === 1) {
+                        if (userName === 'Gavin' && index < 5 && speaking.bitfield === 1) {
+                            index++
                             connection.play(fs.createReadStream('./audio_clips/my_favorite_popsicle.mp3'))
                         }
                         if (index >= 5) {
