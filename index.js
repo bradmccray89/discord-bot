@@ -97,6 +97,16 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         }
         if (fileName !== '') {
             newUserChannel.join().then(connection => {
+                let index = 0
+                connection.on('speaking', (user, speaking) => {
+                    index++
+                    if (userName === 'Gavin' && index < 5 && speaking.bitfield === 1) {
+                        connection.play(fs.createReadStream('./audio_clips/my_favorite_popsicle.mp3'))
+                    }
+                    if (index >= 5) {
+                        connection.disconnect()
+                    }
+                })
                 const dispatcher = connection.play(fs.createReadStream(fileName));
                 dispatcher.on('finish', () => connection.disconnect());
             })
