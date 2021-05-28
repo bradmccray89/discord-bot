@@ -48,6 +48,16 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
     let oldUserChannel = oldMember.channel;
     var userName = '';
     var fileName = '';
+    
+    let newChannelConnection = newUserChannel.connection
+    newChannelConnection.on('speaking', (user, speaking) => {
+        if (speaking.bitfield === 1) {
+            console.log('speaking')
+            playYodaIntro(newChannelConnection, './audio_clips/whatchu_want.mp3')
+        }
+        handleSpeechCommand(user, speaking)
+    })
+
     switch (newMember.id) {
         case '661772640783958052':
             userName = 'Julian';
