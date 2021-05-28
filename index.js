@@ -5,6 +5,8 @@ const fs = require('fs');
 const { prefix, cartman_quotes, help } = require('./config.json');
 const token = process.env.token || require('./environment.json').token;
 
+let yodaTalking = false
+
 client.once('ready', () => {
 	console.log('Ready!');
 });
@@ -57,7 +59,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             break;
         case '318992296181891072':
             userName = 'Brandon';
-            fileName = './audio_clips/put_that_cookie_down.mp3';
+            fileName = './audio_clips/surprise_mothafucka.mp3';
             break;
         case '661775904799850531':
             userName = 'Jacob';
@@ -85,7 +87,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             break;
         default:
             userName = 'A random user';
-            fileName = './audio_clips/fart.mp3';
+            fileName = './audio_clips/tadaah.mp3';
     }
     if (newUserChannel !== null && oldUserChannel?.id !== newUserChannel?.id) {
         for (const member of newUserChannel.members) {
@@ -97,20 +99,17 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         }
         if (fileName !== '') {
             newUserChannel.join().then(connection => {
-                let index = 0
                 if (userName === 'Gavin') {
+                    let index = 0
                     connection.on('speaking', (user, speaking) => {
-                        if (userName === 'Gavin' && index < 5 && speaking.bitfield === 1) {
+                        if (speaking.bitfield === 1 && index < 5) {
                             index++
-                            connection.play(fs.createReadStream('./audio_clips/my_favorite_popsicle.mp3'))
-                        }
-                        if (index >= 5) {
-                            connection.disconnect()
+                            let limit = 5
+                            playYodaIntro(connection, fileName, index, limit)
                         }
                     })
                 } else {
-                    const dispatcher = connection.play(fs.createReadStream(fileName));
-                    dispatcher.on('finish', () => connection.disconnect());
+                    playYodaIntro(connection, fileName)
                 }
             })
         }
@@ -130,6 +129,26 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         }
     }
 });
+
+function playYodaIntro(connection, fileName, index = 1, limit = 1) {
+    let dispatcher;
+    if (!yodaTalking) {
+        dispatcher = connection.play(fs.createReadStream(fileName))
+
+        dispatcher.on('start', () => {
+            yodaTalking = true
+        })
+
+        dispatcher.on('finish', () => {
+            yodaTalking = false
+            if (limit === index) {
+                connection.disconnect()
+            } else {
+                index++
+            }
+        })
+    }
+}
 
 // This is the token used by heroku on production. Can change to local token for testing if needed.
 client.login(token);
