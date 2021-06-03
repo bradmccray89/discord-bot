@@ -49,14 +49,14 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
     var userName = '';
     var fileName = '';
     
-    let newChannelConnection = newUserChannel.connection
-    newChannelConnection.on('speaking', (user, speaking) => {
-        if (speaking.bitfield === 1) {
-            console.log('speaking')
-            playYodaIntro(newChannelConnection, './audio_clips/whatchu_want.mp3')
-        }
-        handleSpeechCommand(user, speaking)
-    })
+    // let newChannelConnection = newUserChannel.connection
+    // newChannelConnection.on('speaking', (user, speaking) => {
+    //     if (speaking.bitfield === 1) {
+    //         console.log('speaking')
+    //         playYodaIntro(newChannelConnection, './audio_clips/whatchu_want.mp3')
+    //     }
+    //     handleSpeechCommand(user, speaking)
+    // })
 
     switch (newMember.id) {
         case '661772640783958052':
@@ -69,7 +69,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             break;
         case '318992296181891072':
             userName = 'Brandon';
-            fileName = './audio_clips/surprise_mothafucka.mp3';
+            fileName = './audio_clips/fart.mp3';
             break;
         case '661775904799850531':
             userName = 'Jacob';
@@ -111,10 +111,10 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             newUserChannel.join().then(connection => {
                 if (userName === 'Gavin') {
                     let index = 0
+                    let limit = 3
                     connection.on('speaking', (user, speaking) => {
-                        if (speaking.bitfield === 1 && index < 5) {
+                        if (speaking.bitfield === 1) {
                             index++
-                            let limit = 5
                             playYodaIntro(connection, fileName, index, limit)
                         }
                     })
@@ -151,10 +151,8 @@ function playYodaIntro(connection, fileName, index = 1, limit = 1) {
 
         dispatcher.on('finish', () => {
             yodaTalking = false
-            if (limit === index) {
+            if (limit <= index) {
                 connection.disconnect()
-            } else {
-                index++
             }
         })
     }
