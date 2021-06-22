@@ -2,10 +2,12 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const fetch = require('node-fetch');
 const fs = require('fs');
+const he = require('he');
 const { prefix, cartman_quotes, help } = require('./config.json');
 const token = process.env.token || require('./environment.json').token;
 
 let yodaTalking = false
+let lastTenInsults = []
 
 client.once('ready', () => {
 	console.log('Ready!');
@@ -30,9 +32,14 @@ client.on('message', async message => {
     }
     else if (command === 'insult') {
         if (message.mentions.users.size) {
-            message.mentions.users.forEach(async(mention) => {
-                const { insult } = await fetch('https://evilinsult.com/generate_insult.php?lang=en&type=json').then(response => response.json());
-                message.channel.send(`${mention} ` + insult);
+            message.mentions.users.forEach(async (mention) => {
+                const result = await getInsult()
+                if (result !== undefined) {
+                    lastTenInsults.unshift(result.number)
+                    lastTenInsults.length = lastTenInsults.length > 10 ? 10 : lastTenInsults.length
+                    const insult = he.decode(result.insult)
+                    message.channel.send(`${mention} ` + insult);
+                }
             });
         }
     } else if (command === 'coinflip') {
@@ -155,6 +162,16 @@ function playYodaIntro(connection, fileName, index = 1, limit = 1) {
                 connection.disconnect()
             }
         })
+    }
+}
+
+async function getInsult() {
+    let result = await fetch('https://evilinsult.com/generate_insult.php?lang=en&type=json').then(response => response.json());
+    if (lastTenInsults.includes(result.number)) {
+        result = getInsult()
+        return result
+    } else {
+        return result
     }
 }
 
