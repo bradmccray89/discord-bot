@@ -10,7 +10,7 @@ let yodaTalking = false
 let lastTenInsults = []
 
 client.once('ready', () => {
-	console.log('Ready!');
+    console.log('Ready!');
 });
 
 client.on('presenceUpdate', (oldMember, newMember) => {
@@ -55,7 +55,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
     let oldUserChannel = oldMember.channel;
     var userName = '';
     var fileName = '';
-    
+
     // let newChannelConnection = newUserChannel.connection
     // newChannelConnection.on('speaking', (user, speaking) => {
     //     if (speaking.bitfield === 1) {
@@ -68,7 +68,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
     switch (newMember.id) {
         case '661772640783958052':
             userName = 'Julian';
-            fileName = './audio_clips/alex_jones.mp3';
+            fileName = './audio_clips/exposed.mp3';
             break;
         case '707469106873368658':
             userName = 'Liam';
