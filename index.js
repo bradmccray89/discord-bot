@@ -116,18 +116,19 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         }
         if (fileName !== '') {
             newUserChannel.join().then(connection => {
-                if (userName === 'Gavin') {
-                    let index = 0
-                    let limit = 3
-                    connection.on('speaking', (user, speaking) => {
-                        if (speaking.bitfield === 1) {
-                            index++
-                            playYodaIntro(connection, fileName, index, limit)
-                        }
-                    })
-                } else {
-                    playYodaIntro(connection, fileName)
-                }
+                // if (userName === 'Gavin') {
+                //     let index = 0
+                //     let limit = 3
+                //     connection.on('speaking', (user, speaking) => {
+                //         if (speaking.bitfield === 1) {
+                //             index++
+                //             playYodaIntro(connection, fileName, index, limit)
+                //         }
+                //     })
+                // } else {
+                //     playYodaIntro(connection, fileName)
+                // }
+                playYodaIntro(connection, fileName)
             })
         }
         if (userName !== '') {
