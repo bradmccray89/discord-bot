@@ -3,6 +3,7 @@ const client = new Discord.Client();
 const fetch = require('node-fetch');
 const fs = require('fs');
 const he = require('he');
+const ytdl = require('ytdl-core');
 const { prefix, cartman_quotes, help } = require('./config.json');
 const token = process.env.token || require('./environment.json').token;
 
@@ -47,6 +48,19 @@ client.on('message', async message => {
         const coinResult = (result === 1) ? 'Heads' : 'Tails';
         const image = (result === 1) ? './images/heads.png' : './images/tails.png';
         message.channel.send({ files: [image] });
+    } else if (command === 'play') {
+        if (message.channel.type !== 'dm') return;
+
+        const audioURL = args.shift();
+
+        const voiceChannel = client.channels.cache.get('701598004171505709');
+
+        voiceChannel.join().then(connection => {
+            const dispatcher = connection.play(ytdl(audioURL, { filter: 'audioonly' }), { volume: 0.2 });
+            dispatcher.on('finish', () => {
+                connection.disconnect();
+            })
+        })
     }
 });
 
