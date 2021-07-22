@@ -12,11 +12,14 @@ module.exports = {
         if (yoda.talking === true && !member.hasPermission('ADMINISTRATOR')) return;
 
         const audioURL = args.shift();
-        const playlist = await ytpl(audioURL);
+        const playlist = null;
+        if (audioURL.match(/^(?!.*\?.*\bv=)https:\/\/www\.youtube\.com\/.*\?.*\blist=.*$/)) {
+            playlist = await ytpl(audioURL);
+        }
 
         channel.join().then(connection => {
             yoda.volume = 0.3;
-            if (playlist.estimatedItemCount > 0) {
+            if (playlist !== null) {
                 const queue = playlist.items
                 playYTPLaylist(queue, connection)
             } else {
