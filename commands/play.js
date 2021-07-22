@@ -12,7 +12,7 @@ module.exports = {
         if (yoda.talking === true && !member.hasPermission('ADMINISTRATOR')) return;
 
         const audioURL = args.shift();
-        const playlist = null;
+        let playlist = null;
         if (audioURL.match(/^(?!.*\?.*\bv=)https:\/\/www\.youtube\.com\/.*\?.*\blist=.*$/)) {
             playlist = await ytpl(audioURL);
         }
