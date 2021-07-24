@@ -1,5 +1,6 @@
 const ytdl = require('ytdl-core');
 const ytpl = require('ytpl');
+const fs = require('fs');
 
 module.exports = {
     name: 'play',
@@ -31,30 +32,50 @@ module.exports = {
         })
 
         function playYTPLaylist(queue, connection) {
-            connection.play(ytdl(queue[0].url, { quality: 'highestaudio', filter: 'audioonly' }), { volume: yoda.volume })
-                .on('start', () => {
-                    yoda.talking = true
-                    return queue.shift()
-                })
-                .on('finish', () => {
-                    if (queue.length >= 1) {
-                        return playYTPLaylist(queue, connection)
-                    } else {
-                        yoda.talking = false
-                        return connection.disconnect()
-                    }
-                })
+            const stream = ytdl(queue[0].url, { quality: 'highestaudio', filter: 'audioonly' })
+            const fileName = `../audio_clips/${queue[0].title}.mp3`
+            stream.pipe(fs.createWriteStream(fileName)).on('finish', () => {
+                connection.play(fileName, { volume: yoda.volume })
+            })
+            // connection.play(stream, { volume: yoda.volume })
+            //     .on('start', () => {
+            //         yoda.talking = true
+            //         return queue.shift()
+            //     })
+            //     .on('finish', () => {
+            //         if (queue.length >= 1) {
+            //             return playYTPLaylist(queue, connection)
+            //         } else {
+            //             yoda.talking = false
+            //             return connection.disconnect()
+            //         }
+            //     })
         }
 
         function playYTSong(audioURL, connection) {
-            connection.play(ytdl(audioURL, { quality: 'highestaudio', filter: 'audioonly' }), { volume: yoda.volume })
-                .on('start', () => {
-                    yoda.talking = true
+            try {
+                console.log('57')
+                const stream = ytdl(audioURL, { quality: 'highestaudio', filter: 'audioonly' });
+                console.log('59')
+                const filePath = `../audio_clips/${audioURL.title}.mp3`;
+                console.log('61')
+
+                stream.pipe(fs.createWriteStream(filePath)).on('finish', () => {
+                    console.log('64')
+                    connection.play(filePath, { volume: yoda.volume })
                 })
-                .on('finish', () => {
-                    yoda.talking = false
-                    return connection.disconnect()
-                })
+            } catch (e) {
+                console.log('bacon \n', e)
+            }
+
+            // connection.play(ytdl(audioURL, { quality: 'highestaudio', filter: 'audioonly' }), { volume: yoda.volume })
+            //     .on('start', () => {
+            //         yoda.talking = true
+            //     })
+            //     .on('finish', () => {
+            //         yoda.talking = false
+            //         return connection.disconnect()
+            //     })
         }
     }
 }
