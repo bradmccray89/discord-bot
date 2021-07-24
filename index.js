@@ -43,7 +43,17 @@ client.on('message', async message => {
     }
 });
 
+client.on('disconnect', () => {
+    yoda.talking = false;
+});
+
 client.on('voiceStateUpdate', (oldMember, newMember) => {
+    // If Yoda leaves a voice channel set talking to false
+    if (newMember.channel === null && oldMember.channel?.id !== newMember.channel?.id) {
+        if (oldMember.id === '770817649189191682') { // Yoda bot ID
+            yoda.talking = false;
+        }
+    }
     voiceIntro.execute(oldMember, newMember, yoda);
 });
 

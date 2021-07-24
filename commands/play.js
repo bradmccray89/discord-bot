@@ -9,7 +9,10 @@ module.exports = {
 
         if (message.channel.type !== 'dm') return;
 
-        if (yoda.talking === true && !member.hasPermission('ADMINISTRATOR')) return;
+        if (yoda.talking === true && !member.hasPermission('ADMINISTRATOR')) {
+            console.log(`${member.user.username} tried to use the play command in #${message.channel.name} but is already talking.`);
+            return;
+        }
 
         const audioURL = args.shift();
         let playlist = null;
