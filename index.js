@@ -1,13 +1,15 @@
+//Discord.js setup
 const Discord = require('discord.js');
-const client = new Discord.Client();
-const { prefix } = require('./config.json');
-const token = process.env.token || require('./environment.json').token;
 const fs = require('fs');
+const { prefix } = require('./config.json');
 const voiceIntro = require('./features/voice-intro.js')
+const token = process.env.token || require('./environment.json').token;
+const client = new Discord.Client();
 
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
+// discord bot
 let yoda = {
     talking: false,
     volume: 1,
@@ -59,3 +61,17 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
 
 // This is the token used by heroku on production. Can change to local token for testing if needed.
 client.login(token);
+
+// express setup
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 5000;
+
+//express api
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
+
+app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+});

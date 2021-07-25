@@ -17,6 +17,7 @@
     "@discordjs/opus": "^0.3.3",
     "discord.js": "^12.4.1",
     "eslint": "^7.27.0",
+    "express": "^4.17.1",
     "ffmpeg-static": "^4.2.7",
     "he": "^1.2.0",
     "node-fetch": "^2.6.1",
