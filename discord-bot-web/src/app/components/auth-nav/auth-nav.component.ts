@@ -7,6 +7,13 @@ import { Component, OnInit } from '@angular/core';
   ]
 })
 export class AuthNavComponent implements OnInit {
+  
+  public items: any[] = [
+    {
+      name: 'Home',
+      link: '/'
+    },
+  ];
 
   constructor() { }
 
