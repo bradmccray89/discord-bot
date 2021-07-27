@@ -1,0 +1,8 @@
+.nav-right > * {
+  margin-left: 1rem;
+}
+
+.title {
+  height: 2.5rem;
+  font-size: x-large;
+}

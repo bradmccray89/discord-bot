@@ -1,0 +1,6 @@
+<label id="list-title">Pick your audio intro clip</label>
+<mat-radio-group class="clip-list" [(ngModel)]="selectedClip">
+    <mat-radio-button class="list-item" *ngFor="let audioClip of audioClipList" [value]="audioClip">
+        {{audioClip.name}}
+    </mat-radio-button>
+</mat-radio-group>
