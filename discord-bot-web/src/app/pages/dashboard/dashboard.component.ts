@@ -19,5 +19,4 @@ export class DashboardComponent implements OnInit {
   cancel() {
     console.log('cancel');
   }
-
 }
