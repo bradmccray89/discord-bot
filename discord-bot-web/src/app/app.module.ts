@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatRippleModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatCardModule } from '@angular/material/card';
 
 // App Components
 import { AppRoutingModule } from './app-routing.module';
@@ -19,6 +20,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { IntroClipListComponent } from './components/intro-clip-list/intro-clip-list.component';
+import { LoginComponent } from './pages/login/login.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { IntroClipListComponent } from './components/intro-clip-list/intro-clip-
     HeaderComponent,
     FooterComponent,
     DashboardComponent,
-    IntroClipListComponent
+    IntroClipListComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +43,8 @@ import { IntroClipListComponent } from './components/intro-clip-list/intro-clip-
     MatRadioModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatCardModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

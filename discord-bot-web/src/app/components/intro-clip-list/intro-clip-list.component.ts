@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IntroClipService } from 'src/app/services/intro-clip.service';
+import { IntroClipService } from '../../services/intro-clip.service';
 
 @Component({
   selector: 'app-intro-clip-list',

@@ -12,11 +12,4 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  save() {
-    console.log('save');
-  }
-
-  cancel() {
-    console.log('cancel');
-  }
 }
