@@ -23,7 +23,10 @@ export class IntroClipListComponent implements OnInit {
   constructor(private introClipService: IntroClipService) { }
 
   ngOnInit(): void {
-    this.introClipService.getAudioClips().subscribe((clips: any) => this.audioClipList = clips);
+    this.introClipService.getAudioClips().subscribe((clips: any) => {
+      console.log(clips);
+      this.audioClipList = clips
+    });
   }
 
 }

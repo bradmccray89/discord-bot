@@ -1,0 +1,11 @@
+.dash-content-container {
+  margin-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.dash-content-container :first-child {
+  margin-right: 1rem;
+}
