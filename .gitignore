@@ -2,3 +2,5 @@ package-lock.json
 node_modules
 npm-debug.log
 environment.json
+.env
+/discord-bot-web
