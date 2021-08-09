@@ -17,7 +17,11 @@ module.exports = {
     function sendMessage(message, data) {
       let modeList = ``;
       data.modes.forEach((mode) => {
-        modeList += `\n- ${mode.name}`;
+        if (mode.name.toLowerCase() === 'total mayhem') {
+          modeList += `\n- **${mode.name}**`;
+        } else {
+          modeList += `\n- ${mode.name}`;
+        }
       });
       message.channel.send(`Todays Arcade Games on Overwatch:${modeList}`);
     }
