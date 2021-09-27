@@ -1,9 +1,16 @@
 const fs = require('fs');
+const {
+  createAudioPlayer,
+  createAudioResource,
+  AudioPlayerStatus,
+  joinVoiceChannel,
+} = require('@discordjs/voice');
+const player = createAudioPlayer();
 
 module.exports = {
   name: 'voice-intro',
   description: 'Plays a voice intro for each person who enters voice chat',
-  execute(oldMember, newMember, yoda) {
+  async execute(oldMember, newMember, yoda) {
     let newUserChannel = newMember.channel;
     let oldUserChannel = oldMember.channel;
     var userName = '';
@@ -34,7 +41,7 @@ module.exports = {
         break;
       case '762503812694540309':
         userName = 'Gavin';
-        fileName = './audio_clips/but_no_can_hide.mp3';
+        fileName = './audio_clips/4_big_guys.mp3';
         break;
       case '316592946973638657':
         userName = 'FattyB';
@@ -59,9 +66,13 @@ module.exports = {
         });
       }
       if (fileName !== '') {
-        newUserChannel.join().then((connection) => {
-          playYodaIntro(connection, fileName);
+        const resource = createAudioResource(fileName);
+        const connection = joinVoiceChannel({
+          channelId: newUserChannel.id,
+          guildId: newUserChannel.guild.id,
+          adapterCreator: newUserChannel.guild.voiceAdapterCreator,
         });
+        playYodaIntro(connection, resource);
       }
       if (userName !== '') {
         const time = new Date();
@@ -87,19 +98,19 @@ module.exports = {
       }
     }
 
-    function playYodaIntro(connection, fileName, index = 1, limit = 1) {
-      let dispatcher;
+    function playYodaIntro(connection, resource, index = 1, limit = 1) {
       if (!yoda.talking) {
-        dispatcher = connection.play(fs.createReadStream(fileName));
+        yoda.talking = true;
+        player.play(resource);
 
-        dispatcher.on('start', () => {
-          yoda.talking = true;
-        });
+        connection.subscribe(player);
 
-        dispatcher.on('finish', () => {
-          yoda.talking = false;
-          if (limit <= index) {
-            connection.disconnect();
+        player.on('stateChange', (oldState, newState) => {
+          if (newState.status === AudioPlayerStatus.Idle) {
+            if (limit <= index) {
+              yoda.talking = false;
+              connection.destroy();
+            }
           }
         });
       }

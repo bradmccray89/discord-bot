@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "engines": {
-    "node": "14.x"
+    "node": "16.x"
   },
   "main": "index.js",
   "scripts": {
@@ -15,11 +15,13 @@
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.3.3",
+    "@discordjs/voice": "^0.6.0",
     "axios": "^0.21.1",
-    "discord.js": "^12.4.1",
+    "discord.js": "^13.1.0",
     "eslint": "^7.27.0",
     "ffmpeg-static": "^4.2.7",
     "he": "^1.2.0",
+    "libsodium-wrappers": "^0.7.9",
     "node-fetch": "^2.6.1",
     "youtube-playlist": "^1.0.4",
     "ytdl-core": "^4.9.0",
