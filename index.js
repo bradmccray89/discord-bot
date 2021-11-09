@@ -8,50 +8,73 @@ const client = new Client({
     Intents.FLAGS.DIRECT_MESSAGES,
   ],
 });
+const dotenv = require('dotenv');
 const { prefix } = require('./config.json');
 const token = process.env.token || require('./environment.json').token;
 const fs = require('fs');
-const voiceIntro = require('./features/voice-intro.js');
+const voiceIntro = require('./events/voice-intro.js');
 
-client.commands = new Collection();
-const commandFiles = fs
-  .readdirSync('./commands')
-  .filter((file) => file.endsWith('.js'));
+dotenv.config();
 
 let yoda = {
   talking: false,
   volume: 1,
 };
 
+client.commands = new Collection();
+const commandFiles = fs
+  .readdirSync('./commands')
+  .filter((file) => file.endsWith('.js'));
+
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
-  client.commands.set(command.name, command);
+  client.commands.set(command.data.name, command);
 }
 
 client.once('ready', () => {
   console.log('Ready!');
 });
 
+client.on('interactionCreate', async (interaction) => {
+  console.log(
+    `${interaction.user.tag} in #${interaction.channel.name} triggered an interaction.`
+  );
+  if (!interaction.isCommand()) return;
+
+  const command = client.commands.get(interaction.commandName);
+
+  if (!command) return;
+
+  try {
+    await command.execute(interaction);
+  } catch (error) {
+    await interaction.reply({
+      content: 'There was an error while executing this command!',
+      ephemeral: true,
+    });
+  }
+});
+
 client.on('presenceUpdate', (oldMember, newMember) => {
   // Do something when people start and stop games
 });
 
-client.on('message', async (message) => {
-  const mainVoiceChannel = client.channels.cache.get('701598004171505709'); //'Sexy People Only' in 'Beasts of Gaming'
+// client.on('message', async (message) => {
+//   const mainVoiceChannel = client.channels.cache.get('701598004171505709'); //'Sexy People Only' in 'Beasts of Gaming'
 
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
+//   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-  const args = message.content.slice(prefix.length).trim().split(' ');
-  const command = args.shift().toLowerCase();
+//   const args = message.content.slice(prefix.length).trim().split(' ');
+//   const command = args.shift().toLowerCase();
 
-  if (!client.commands.has(command)) return;
+//   if (!client.commands.has(command)) return;
 
-  try {
-    client.commands.get(command).execute(message, args, yoda, mainVoiceChannel);
-  } catch (error) {
-    console.error(error);
-  }
-});
+//   try {
+//     client.commands.get(command).execute(message, args, yoda, mainVoiceChannel);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// });
 
 client.on('disconnect', () => {
   yoda.talking = false;

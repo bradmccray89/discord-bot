@@ -1,9 +1,12 @@
 const { help } = require('../config.json');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports = {
-    name: 'help',
-    description: 'Shows help information - needs to be reworked',
-    execute(message) {
-        message.channel.send(help);
-    }
-}
+  data: new SlashCommandBuilder()
+    .setName('help')
+    .setDescription('Shows help information - needs to be reworked'),
+
+  async execute(interaction) {
+    interaction.reply(help);
+  },
+};
