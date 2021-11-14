@@ -8,8 +8,8 @@ const client = new Client({
     Intents.FLAGS.DIRECT_MESSAGES,
   ],
 });
+const { joinVoiceChannel } = require('@discordjs/voice');
 const dotenv = require('dotenv');
-const { prefix } = require('./config.json');
 const token = process.env.token || require('./environment.json').token;
 const fs = require('fs');
 const voiceIntro = require('./events/voice-intro.js');
@@ -49,7 +49,7 @@ client.on('interactionCreate', async (interaction) => {
     await command.execute(interaction);
   } catch (error) {
     await interaction.reply({
-      content: 'There was an error while executing this command!',
+      content: `There was an error while executing this command! ${error}`,
       ephemeral: true,
     });
   }
@@ -80,18 +80,18 @@ client.on('disconnect', () => {
   yoda.talking = false;
 });
 
-client.on('voiceStateUpdate', (oldMember, newMember) => {
+client.on('voiceStateUpdate', (oldState, newState) => {
   // If Yoda leaves a voice channel set talking to false
   if (
-    newMember.channel === null &&
-    oldMember.channel?.id !== newMember.channel?.id
+    newState.channelId === null &&
+    oldState.channelId !== newState.channelId
   ) {
-    if (oldMember.id === '770817649189191682') {
+    if (oldState.id === '770817649189191682') {
       // Yoda bot ID
       yoda.talking = false;
     }
   }
-  voiceIntro.execute(oldMember, newMember, yoda);
+  voiceIntro.execute(oldState, newState, yoda);
 });
 
 // This is the token used by heroku on production. Can change to local token for testing if needed.

@@ -4,19 +4,20 @@ const {
   createAudioResource,
   AudioPlayerStatus,
   joinVoiceChannel,
+  getVoiceConnection,
+  VoiceConnectionStatus,
 } = require('@discordjs/voice');
-const player = createAudioPlayer();
 
 module.exports = {
   name: 'voice-intro',
   description: 'Plays a voice intro for each person who enters voice chat',
-  async execute(oldMember, newMember, yoda) {
-    let newUserChannel = newMember.channel;
-    let oldUserChannel = oldMember.channel;
+  async execute(oldState, newState, yoda) {
+    let newUserChannel = newState.channel;
+    let oldUserChannel = oldState.channel;
     var userName = '';
     var fileName = '';
 
-    switch (newMember.id) {
+    switch (newState.id) {
       case '661772640783958052':
         userName = 'Julian';
         fileName = './audio_clips/exposed.mp3';
@@ -67,16 +68,11 @@ module.exports = {
       }
       if (fileName !== '') {
         const resource = createAudioResource(fileName);
-        const connection = joinVoiceChannel({
-          channelId: newUserChannel.id,
-          guildId: newUserChannel.guild.id,
-          adapterCreator: newUserChannel.guild.voiceAdapterCreator,
-        });
-        playYodaIntro(connection, resource);
+        playYodaIntro(resource);
       }
       if (userName !== '') {
         const time = new Date();
-        const user = newUserChannel.guild.members.cache.get(newMember.id);
+        const user = newUserChannel.guild.members.cache.get(newState.id);
         var userActivity = '';
         user.presence.activities.forEach((activity, index) => {
           userActivity =
@@ -98,20 +94,31 @@ module.exports = {
       }
     }
 
-    function playYodaIntro(connection, resource, index = 1, limit = 1) {
+    function playYodaIntro(resource, index = 1, limit = 1) {
       if (!yoda.talking) {
-        yoda.talking = true;
-        player.play(resource);
+        const connection = joinVoiceChannel({
+          channelId: newUserChannel.id,
+          guildId: newUserChannel.guild.id,
+          adapterCreator: newUserChannel.guild.voiceAdapterCreator,
+        });
+        connection.on(VoiceConnectionStatus.Ready, async () => {
+          const player = createAudioPlayer();
+          yoda.talking = true;
+          resource.playStream.once(`readable`, () => {
+            player.play(resource);
+          });
+          connection.subscribe(player);
 
-        connection.subscribe(player);
-
-        player.on('stateChange', (oldState, newState) => {
-          if (newState.status === AudioPlayerStatus.Idle) {
-            if (limit <= index) {
+          player.on('stateChange', async (oldState, newState) => {
+            if (newState.status === AudioPlayerStatus.Idle && limit <= index) {
               yoda.talking = false;
-              connection.destroy();
+              player.stop();
+              connection.disconnect();
             }
-          }
+          });
+          player.on('error', (error) => {
+            console.log('error', error.message);
+          });
         });
       }
     }

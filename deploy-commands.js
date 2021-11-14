@@ -11,8 +11,8 @@ const commandFiles = fs
   .filter((file) => file.endsWith('.js'));
 
 // Place your client and guild ids here
-const clientId = '770817649189191682';
-const guildId = '701598004171505704';
+const clientId = process.env.clientId;
+const guildId = process.env.guildId;
 const token = process.env.token;
 
 for (const file of commandFiles) {
