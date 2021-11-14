@@ -74,7 +74,7 @@ module.exports = {
         const time = new Date();
         const user = newUserChannel.guild.members.cache.get(newState.id);
         var userActivity = '';
-        user.presence.activities.forEach((activity, index) => {
+        user.presence?.activities.forEach((activity, index) => {
           userActivity =
             index === 0
               ? userActivity.concat(activity.type)
