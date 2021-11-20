@@ -8,13 +8,35 @@ const client = new Client({
     Intents.FLAGS.DIRECT_MESSAGES,
   ],
 });
-const { joinVoiceChannel } = require('@discordjs/voice');
 const dotenv = require('dotenv');
 const token = process.env.token || require('./environment.json').token;
 const fs = require('fs');
 const voiceIntro = require('./events/voice-intro.js');
 
 dotenv.config();
+
+// Import the functions you need from the SDKs you need
+const { initializeApp } = require('firebase/app');
+const { getStorage } = require('firebase/storage');
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: process.env.firebase_api_key,
+  authDomain: process.env.firebase_auth_domain,
+  databaseURL: process.env.firebase_database_url,
+  projectId: process.env.firebase_project_id,
+  storageBucket: process.env.firebase_storage_bucket,
+  messagingSenderId: process.env.firebase_messaging_sender_id,
+  appId: process.env.firebase_app_id,
+  measurementId: process.env.firebase_measurement_id,
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
 
 let yoda = {
   talking: false,
@@ -96,3 +118,15 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 
 // This is the token used by heroku on production. Can change to local token for testing if needed.
 client.login(token);
+
+// Express API server
+const express = require('express');
+const server = express();
+
+server.get('/', (req, res) => {
+  res.send('Hello World');
+});
+
+server.listen(3000, () => {
+  console.log('Server is running');
+});
