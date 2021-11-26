@@ -15,29 +15,6 @@ const voiceIntro = require('./events/voice-intro.js');
 
 dotenv.config();
 
-// Import the functions you need from the SDKs you need
-const { initializeApp } = require('firebase/app');
-const { getStorage } = require('firebase/storage');
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: process.env.firebase_api_key,
-  authDomain: process.env.firebase_auth_domain,
-  databaseURL: process.env.firebase_database_url,
-  projectId: process.env.firebase_project_id,
-  storageBucket: process.env.firebase_storage_bucket,
-  messagingSenderId: process.env.firebase_messaging_sender_id,
-  appId: process.env.firebase_app_id,
-  measurementId: process.env.firebase_measurement_id,
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
-
 let yoda = {
   talking: false,
   volume: 1,
@@ -77,27 +54,6 @@ client.on('interactionCreate', async (interaction) => {
   }
 });
 
-client.on('presenceUpdate', (oldMember, newMember) => {
-  // Do something when people start and stop games
-});
-
-// client.on('message', async (message) => {
-//   const mainVoiceChannel = client.channels.cache.get('701598004171505709'); //'Sexy People Only' in 'Beasts of Gaming'
-
-//   if (!message.content.startsWith(prefix) || message.author.bot) return;
-
-//   const args = message.content.slice(prefix.length).trim().split(' ');
-//   const command = args.shift().toLowerCase();
-
-//   if (!client.commands.has(command)) return;
-
-//   try {
-//     client.commands.get(command).execute(message, args, yoda, mainVoiceChannel);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// });
-
 client.on('disconnect', () => {
   yoda.talking = false;
 });
@@ -120,13 +76,4 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 client.login(token);
 
 // Express API server
-const express = require('express');
-const server = express();
-
-server.get('/', (req, res) => {
-  res.send('Hello World');
-});
-
-server.listen(3000, () => {
-  console.log('Server is running');
-});
+require('./server.js');
