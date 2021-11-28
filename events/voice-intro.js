@@ -7,6 +7,11 @@ const {
   getVoiceConnection,
   VoiceConnectionStatus,
 } = require('@discordjs/voice');
+const { databaseApp, storageApp } = require('../firebase-conf.js');
+
+// Import the functions you need from the SDKs you need
+const database = require('firebase/database');
+const storage = require('firebase/storage');
 
 module.exports = {
   name: 'voice-intro',
@@ -67,8 +72,39 @@ module.exports = {
         });
       }
       if (fileName !== '') {
-        const resource = createAudioResource(fileName);
-        playYodaIntro(resource);
+        const dbRef = database.ref(databaseApp);
+        database
+          .get(database.child(dbRef, `users/${newState.id}`))
+          .then(async (snapshot) => {
+            if (snapshot.exists()) {
+              userInfo = snapshot.val();
+              const storageRef = storage.ref(
+                storageApp,
+                `voice-intro-clips/` + userInfo.clipName
+              );
+              storage.getDownloadURL(storageRef).then((url) => {
+                const resource = createAudioResource(url);
+                playYodaIntro(resource);
+              });
+            } else {
+              console.log('No data available. Playing default');
+              database
+                .get(database.child(dbRef, 'users/default'))
+                .then((snapshot) => {
+                  const storageRef = storage.ref(
+                    storageApp,
+                    `voice-intro-clips/` + snapshot.val().clipName
+                  );
+                  storage.getDownloadURL(storageRef).then((url) => {
+                    const resource = createAudioResource(url);
+                    playYodaIntro(resource);
+                  });
+                });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
       if (userName !== '') {
         const time = new Date();

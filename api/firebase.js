@@ -1,33 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-// Import the functions you need from the SDKs you need
-const { initializeApp } = require('firebase/app');
-const {
-  getStorage,
-  getDownloadURL,
-  ref,
-  listAll,
-} = require('firebase/storage');
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: process.env.firebase_api_key,
-  authDomain: process.env.firebase_auth_domain,
-  databaseURL: process.env.firebase_database_url,
-  projectId: process.env.firebase_project_id,
-  storageBucket: process.env.firebase_storage_bucket,
-  messagingSenderId: process.env.firebase_messaging_sender_id,
-  appId: process.env.firebase_app_id,
-  measurementId: process.env.firebase_measurement_id,
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
+const { firebaseApp, storageApp, databaseApp } = require('../firebase-conf.js');
+const database = require('firebase/database');
+const storage = require('firebase/storage');
 
 router.get('/', function (req, res) {
   res.json({ body: 'Hello World from api/storage' });
@@ -35,8 +11,9 @@ router.get('/', function (req, res) {
 
 router.get('/voiceintrolist', function (req, res) {
   const voiceIntroList = [];
-  const storageRef = ref(storage, 'voice-intro-clips');
-  listAll(storageRef)
+  const storageRef = storage.ref(storageApp, 'voice-intro-clips');
+  // prettier-ignore
+  storage.listAll(storageRef)
     .then(function (result) {
       result.items.forEach(function (item) {
         const voiceIntro = {
@@ -52,10 +29,38 @@ router.get('/voiceintrolist', function (req, res) {
     });
 });
 
-router.get('/voiceintro/:id', async function (req, res) {
-  const storageRef = ref(storage, `voice-intro-clips/` + req.params.id);
-  const fileRef = await getDownloadURL(storageRef);
+router.get('/voiceintro/:name', async function (req, res) {
+  const storageRef = storage.ref(
+    storageApp,
+    `voice-intro-clips/` + req.params.name
+  );
+  const fileRef = await storage.getDownloadURL(storageRef);
   res.json({ body: fileRef });
+});
+
+router.get('/userintro/:id', function (req, res) {
+  const dbRef = database.ref(databaseApp);
+  database
+    .get(database.child(dbRef, `users/${req.params.id}`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        res.json({ body: snapshot.val() });
+      } else {
+        res.json({ body: 'No data available' });
+        console.log('No data available');
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
+router.put('/userintro', function (req, res) {
+  database.set(database.ref(databaseApp, 'users/' + req.body.id), {
+    id: req.body.id,
+    clipName: req.body.clipName,
+  });
+  res.json({ body: 'User intro updated' });
 });
 
 module.exports = router;
