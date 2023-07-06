@@ -54,6 +54,10 @@ module.exports = {
 				userName = 'Andrew B.';
 				fileName = './audio_clips/im_joe_bidens_husband.mp3';
 				break;
+			case '302988754124013568':
+				userName = 'Garrett';
+				fileName = './audio_clips/i_wanna.mp3';
+				break;
 			default:
 				userName = 'A random user';
 				fileName = './audio_clips/tadaah.mp3';
