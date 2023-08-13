@@ -58,6 +58,9 @@ module.exports = {
 				userName = 'Garrett';
 				fileName = './audio_clips/i_wanna.mp3';
 				break;
+			case '513550178226274304':
+				userName = 'Jylante';
+				fileName = './audio_clips/cartman_slave_song.mp3';
 			default:
 				userName = 'A random user';
 				fileName = './audio_clips/tadaah.mp3';
