@@ -42,7 +42,7 @@ module.exports = {
 				break;
 			case '762503812694540309':
 				userName = 'Gavin';
-				fileName = './audio_clips/4_big_guys.mp3';
+				fileName = './audio_clips/i_just_wanna_fuck_a_dude.mp3';
 				break;
 			case '316592946973638657':
 				userName = 'FattyB';
