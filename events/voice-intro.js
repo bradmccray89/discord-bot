@@ -46,6 +46,7 @@ module.exports = {
 				break;
 			case '316592946973638657':
 				userName = 'FattyB';
+				fileName = './audio_clips/wumbo_explanation.mp3';
 				break;
 			case '161943929665748992':
 				userName = 'Corey';
