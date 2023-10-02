@@ -15,12 +15,15 @@ module.exports = {
 		),
 
 	async execute(interaction, yoda) {
+		if (!interaction.member.voice.channel) {
+			interaction.reply('You must be in a voice channel to use this command.');
+			return;
+		}
 		console.log('cocaine command triggered', interaction.member.voice.channel);
 		var userChannel = interaction.member.voice.channel;
-		var fileName = './audio_clips/favorite_weed_is_cocaine.mp3';
+		var fileName = './audio_clips/cocaine.mp3';
 		var resource = createAudioResource(fileName);
 		playYodaIntro(resource);
-		interaction.reply('Playing Theo Von.');
 
 		function playYodaIntro(resource, index = 1, limit = 1) {
 			if (!yoda.talking) {
@@ -38,6 +41,7 @@ module.exports = {
 					connection.subscribe(player);
 
 					player.on('stateChange', async (oldState, newState) => {
+						interaction.reply('Playing Theo Von.');
 						if (newState.status === AudioPlayerStatus.Idle && limit <= index) {
 							yoda.talking = false;
 							player.stop();
@@ -45,9 +49,12 @@ module.exports = {
 						}
 					});
 					player.on('error', (error) => {
+						interaction.reply('Cannot play audio clip.' + error.message);
 						console.log('error', error.message);
 					});
 				});
+			} else {
+				interaction.reply('Yoda is already talking.');
 			}
 		}
 	},
