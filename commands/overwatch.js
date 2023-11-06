@@ -14,6 +14,11 @@ module.exports = {
 				sendReply(interaction, data);
 			})
 			.catch((error) => {
+				interaction.reply({
+					content:
+						"This command was made for Overwatch 1, but Blizzard hates fun so they didn't make an API for Overwatch 2. Sorry! :'(",
+					ephemeral: true,
+				});
 				console.log(error);
 			});
 
